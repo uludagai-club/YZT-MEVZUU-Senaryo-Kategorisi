@@ -170,45 +170,60 @@ streamlit run streamlitApp.py
 - Mobil responsive ayarları
 
   ------
-  LM Studio Kurulumu ve Yapılandırması
-Bu bölümde, LM Studio'nun yerel bir sunucuda çalışacak şekilde nasıl kurulacağı ve gemma-3-12b-it modelinin nasıl indirilip yapılandırılacağı açıklanmaktadır.
-Adım 1: LM Studio'yu İndirin ve Kurun
 
-LM Studio'yu İndirin: Resmi LM Studio web sitesinden (https://lmstudio.ai/) işletim sisteminize uygun sürümü indirin.
-Kurulumu Gerçekleştirin: İndirilen dosyayı çalıştırarak kurulum sihirbazını takip edin ve LM Studio'yu bilgisayarınıza kurun.
+LM Studio Kurulumu ve Yapılandırması
+Bu bölüm, gemma-3-12b-it modelini kullanarak LM Studio'yu yerel bir sunucuda kurma ve yapılandırma adımlarını açıklamaktadır.
+Gereksinimler
 
-Adım 2: Modeli İndirin
+İşletim sisteminizle uyumlu LM Studio yazılımı
+gemma-3-12b-it modeli
+Yeterli donanım (önerilen: en az 16 GB RAM ve GPU desteği)
+İnternet bağlantısı (model indirme için)
+
+Kurulum Adımları
+1. LM Studio Kurulumu
+
+İndirme: LM Studio resmi web sitesinden işletim sisteminize uygun sürümü indirin.
+Kurulum: İndirilen dosyayı çalıştırın ve kurulum sihirbazındaki talimatları izleyerek kurulumu tamamlayın.
+
+2. Model İndirme
 
 LM Studio uygulamasını başlatın.
-Model kütüphanesinde gemma-3-12b-it modelini arayın.
-Modeli seçin ve indirin. İndirme işlemi tamamlandıktan sonra model otomatik olarak LM Studio tarafından kullanılabilir hale gelecektir.
+Model kütüphanesinde arama çubuğuna gemma-3-12b-it yazın.
+Modeli seçin ve İndir butonuna tıklayın. İndirme tamamlandıktan sonra model otomatik olarak kullanıma hazır olacaktır.
 
-Adım 3: Yerel Sunucuyu Başlatın
+3. Yerel Sunucuyu Başlatma
 
-LM Studio arayüzünde, indirilen gemma-3-12b-it modelini seçin.
-Yerel sunucuyu başlatmak için "Start Server" seçeneğini tıklayın.
-Sunucu varsayılan olarak http://127.0.0.1:1234 adresinde çalışacaktır.
+LM Studio arayüzünden gemma-3-12b-it modelini seçin.
+Start Server butonuna tıklayarak yerel sunucuyu başlatın.
+Sunucu varsayılan olarak http://127.0.0.1:1234 adresinde çalışır.
 
-Adım 4: API Yapılandırması
-Aşağıdaki ayarları kullanarak uygulamanızı LM Studio API ile entegre edin:
+4. API Yapılandırması
+Uygulamanızı LM Studio API ile entegre etmek için aşağıdaki yapılandırma ayarlarını kullanın:
 LM_STUDIO_API_URL = "http://127.0.0.1:1234/v1/chat/completions"
 MODEL_NAME = "gemma-3-12b-it"
 
 
-LM_STUDIO_API_URL: Yerel sunucunun API uç noktası. Varsayılan olarak http://127.0.0.1:1234/v1/chat/completions kullanılır.
-MODEL_NAME: Kullanılacak modelin adı, bu durumda gemma-3-12b-it.
+LM_STUDIO_API_URL: Yerel sunucunun API uç noktası (http://127.0.0.1:1234/v1/chat/completions).
+MODEL_NAME: Kullanılacak modelin adı (gemma-3-12b-it).
 
-Adım 5: Test Etme
+5. Test Etme
 
 LM Studio sunucusunun çalıştığından emin olun.
-API istemcinizi kullanarak LM_STUDIO_API_URL adresine bir test isteği gönderin.
-Yanıtın doğru şekilde döndüğünü kontrol edin.
+Bir API istemcisi (ör. Postman veya cURL) kullanarak LM_STUDIO_API_URL adresine test isteği gönderin.
+Yanıtın doğru şekilde döndüğünü doğrulayın.
 
-Notlar
+Önemli Notlar
 
-Modelin çalışması için yeterli donanım kaynaklarına (RAM, GPU, vb.) sahip olduğunuzdan emin olun.
-Yerel sunucunun port numarası (1234) farklı bir uygulamayla çakışırsa, LM Studio ayarlarından portu değiştirebilirsiniz.
-Daha fazla bilgi için LM Studio'nun resmi dokümantasyonuna göz atın: https://lmstudio.ai/docs.
+Modelin düzgün çalışması için yeterli donanım kaynaklarına sahip olduğunuzdan emin olun.
+Varsayılan port (1234) başka bir uygulama ile çakışırsa, LM Studio ayarlarından portu değiştirin.
+Daha fazla bilgi ve destek için LM Studio dokümantasyonuna göz atın.
+
+Hata Ayıklama
+
+Sunucu çalışmıyor: LM Studio'nun açık olduğundan ve doğru modelin seçildiğinden emin olun.
+Bağlantı hatası: LM_STUDIO_API_URL adresini ve port numarasını kontrol edin.
+Model yüklenmiyor: Modelin tamamen indirildiğini ve dosya bütünlüğünü doğrulayın.
 
 
 ## 🎯 Test Verileri
