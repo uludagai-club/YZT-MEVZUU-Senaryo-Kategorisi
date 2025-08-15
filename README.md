@@ -1,3 +1,9 @@
+#BilisimVadisi2025
+
+#turkiyeacikkaynakplatformu
+
+https://github.com/tracikkaynak
+
 # 📞 AI Çağrı Merkezi
 
 Modern, sesli sohbet destekli yapay zeka tabanlı çağrı merkezi uygulaması. Türkçe dil desteği ile müşteri hizmetlerini otomatikleştiren gelişmiş platform.
