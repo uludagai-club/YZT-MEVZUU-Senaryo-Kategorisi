@@ -169,6 +169,48 @@ streamlit run streamlitApp.py
 - Sayfa layoutu
 - Mobil responsive ayarları
 
+  ------
+  LM Studio Kurulumu ve Yapılandırması
+Bu bölümde, LM Studio'nun yerel bir sunucuda çalışacak şekilde nasıl kurulacağı ve gemma-3-12b-it modelinin nasıl indirilip yapılandırılacağı açıklanmaktadır.
+Adım 1: LM Studio'yu İndirin ve Kurun
+
+LM Studio'yu İndirin: Resmi LM Studio web sitesinden (https://lmstudio.ai/) işletim sisteminize uygun sürümü indirin.
+Kurulumu Gerçekleştirin: İndirilen dosyayı çalıştırarak kurulum sihirbazını takip edin ve LM Studio'yu bilgisayarınıza kurun.
+
+Adım 2: Modeli İndirin
+
+LM Studio uygulamasını başlatın.
+Model kütüphanesinde gemma-3-12b-it modelini arayın.
+Modeli seçin ve indirin. İndirme işlemi tamamlandıktan sonra model otomatik olarak LM Studio tarafından kullanılabilir hale gelecektir.
+
+Adım 3: Yerel Sunucuyu Başlatın
+
+LM Studio arayüzünde, indirilen gemma-3-12b-it modelini seçin.
+Yerel sunucuyu başlatmak için "Start Server" seçeneğini tıklayın.
+Sunucu varsayılan olarak http://127.0.0.1:1234 adresinde çalışacaktır.
+
+Adım 4: API Yapılandırması
+Aşağıdaki ayarları kullanarak uygulamanızı LM Studio API ile entegre edin:
+LM_STUDIO_API_URL = "http://127.0.0.1:1234/v1/chat/completions"
+MODEL_NAME = "gemma-3-12b-it"
+
+
+LM_STUDIO_API_URL: Yerel sunucunun API uç noktası. Varsayılan olarak http://127.0.0.1:1234/v1/chat/completions kullanılır.
+MODEL_NAME: Kullanılacak modelin adı, bu durumda gemma-3-12b-it.
+
+Adım 5: Test Etme
+
+LM Studio sunucusunun çalıştığından emin olun.
+API istemcinizi kullanarak LM_STUDIO_API_URL adresine bir test isteği gönderin.
+Yanıtın doğru şekilde döndüğünü kontrol edin.
+
+Notlar
+
+Modelin çalışması için yeterli donanım kaynaklarına (RAM, GPU, vb.) sahip olduğunuzdan emin olun.
+Yerel sunucunun port numarası (1234) farklı bir uygulamayla çakışırsa, LM Studio ayarlarından portu değiştirebilirsiniz.
+Daha fazla bilgi için LM Studio'nun resmi dokümantasyonuna göz atın: https://lmstudio.ai/docs.
+
+
 ## 🎯 Test Verileri
 
 ### Test Müşterileri
