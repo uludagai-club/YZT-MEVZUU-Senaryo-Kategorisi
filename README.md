@@ -172,7 +172,7 @@ streamlit run streamlitApp.py
   ------
 ...
 
-#LM Studio Kurulumu ve Yapılandırması
+[#LM Studio Kurulumu ve Yapılandırması
 Bu bölüm, gemma-3-12b-it modelini kullanarak LM Studio'yu yerel bir sunucuda kurma ve yapılandırma adımlarını açıklamaktadır.
 Gereksinimler
 
@@ -203,7 +203,7 @@ Sunucu varsayılan olarak http://127.0.0.1:1234 adresinde çalışır.
 Uygulamanızı LM Studio API ile entegre etmek için aşağıdaki yapılandırma ayarlarını kullanın:
 LM_STUDIO_API_URL = "http://127.0.0.1:1234/v1/chat/completions"
 MODEL_NAME = "gemma-3-12b-it"
-
+](https://github.com/uludagai-club/YZT-MEVZUU-Senaryo-Kategorisi-BilisimVadisi2025-)
 
 LM_STUDIO_API_URL: Yerel sunucunun API uç noktası (http://127.0.0.1:1234/v1/chat/completions).
 MODEL_NAME: Kullanılacak modelin adı (gemma-3-12b-it).
