@@ -170,12 +170,13 @@ streamlit run streamlitApp.py
 - Mobil responsive ayarları
 
   ------
+...
 
-LM Studio Kurulumu ve Yapılandırması
+#LM Studio Kurulumu ve Yapılandırması
 Bu bölüm, gemma-3-12b-it modelini kullanarak LM Studio'yu yerel bir sunucuda kurma ve yapılandırma adımlarını açıklamaktadır.
 Gereksinimler
 
-İşletim sisteminizle uyumlu LM Studio yazılımı
+#İşletim sisteminizle uyumlu LM Studio yazılımı
 gemma-3-12b-it modeli
 Yeterli donanım (önerilen: en az 16 GB RAM ve GPU desteği)
 İnternet bağlantısı (model indirme için)
@@ -224,6 +225,9 @@ Hata Ayıklama
 Sunucu çalışmıyor: LM Studio'nun açık olduğundan ve doğru modelin seçildiğinden emin olun.
 Bağlantı hatası: LM_STUDIO_API_URL adresini ve port numarasını kontrol edin.
 Model yüklenmiyor: Modelin tamamen indirildiğini ve dosya bütünlüğünü doğrulayın.
+
+
+
 
 
 ## 🎯 Test Verileri
