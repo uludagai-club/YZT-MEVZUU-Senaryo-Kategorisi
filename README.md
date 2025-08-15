@@ -48,8 +48,8 @@ Modern, sesli sohbet destekli yapay zeka tabanlı çağrı merkezi uygulaması. 
 
 ### 1. Repository'yi Klonlayın
 ```bash
-git clone https://github.com/[your-username]/gelismis_LLM.git
-cd gelismis_LLM
+git clone https://github.com/[your-username]/YZT-MEVZUU-Senaryo-Kategorisi.git
+
 ```
 
 ### 2. Sanal Ortam Oluşturun
@@ -115,7 +115,7 @@ streamlit run streamlitApp.py
 ## 📁 Proje Yapısı
 
 ```
-gelismis_LLM/
+
 ├── streamlitApp.py          # Ana Streamlit uygulaması
 ├── app_with_database.py     # FastAPI backend
 ├── database.py              # SQLite veritabanı yönetimi
