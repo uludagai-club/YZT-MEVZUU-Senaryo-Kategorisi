@@ -1,0 +1,250 @@
+-- Çağrı Merkezi Veritabanı Tasarımı
+-- SQLite ve PostgreSQL uyumlu
+
+-- ================================
+-- 1. MÜŞTERI TABLOSU
+-- ================================
+CREATE TABLE customers (
+    customer_id VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    phone VARCHAR(15),
+    email VARCHAR(100),
+    address TEXT,
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'active', -- active, suspended, cancelled
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ================================
+-- 2. PAKET TABLOSU
+-- ================================
+CREATE TABLE packages (
+    package_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    package_name VARCHAR(50) UNIQUE NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    description TEXT,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ================================
+-- 3. PAKET ÖZELLİKLERİ
+-- ================================
+CREATE TABLE package_features (
+    feature_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    package_id INTEGER NOT NULL,
+    feature_name VARCHAR(100) NOT NULL,
+    feature_value VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (package_id) REFERENCES packages(package_id) ON DELETE CASCADE
+);
+
+-- ================================
+-- 4. MÜŞTERİ PAKET ABONELIKLERI
+-- ================================
+CREATE TABLE customer_subscriptions (
+    subscription_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    customer_id VARCHAR(10) NOT NULL,
+    package_id INTEGER NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE,
+    status VARCHAR(20) DEFAULT 'active', -- active, expired, cancelled
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE,
+    FOREIGN KEY (package_id) REFERENCES packages(package_id)
+);
+
+-- ================================
+-- 5. MÜŞTERİ BAKİYE TABLOSU
+-- ================================
+CREATE TABLE customer_balances (
+    balance_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    customer_id VARCHAR(10) UNIQUE NOT NULL,
+    current_balance DECIMAL(10,2) DEFAULT 0.00,
+    credit_limit DECIMAL(10,2) DEFAULT 0.00,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE
+);
+
+-- ================================
+-- 6. FATURA TABLOSU
+-- ================================
+CREATE TABLE bills (
+    bill_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    customer_id VARCHAR(10) NOT NULL,
+    bill_month VARCHAR(7) NOT NULL, -- YYYY-MM format
+    amount DECIMAL(10,2) NOT NULL,
+    due_date DATE NOT NULL,
+    is_paid BOOLEAN DEFAULT FALSE,
+    paid_date TIMESTAMP NULL,
+    payment_method VARCHAR(50), -- credit_card, bank_transfer, cash, etc.
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE,
+    UNIQUE(customer_id, bill_month)
+);
+
+-- ================================
+-- 7. KULLANIM İSTATİSTİKLERİ
+-- ================================
+CREATE TABLE usage_stats (
+    usage_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    customer_id VARCHAR(10) NOT NULL,
+    usage_month VARCHAR(7) NOT NULL, -- YYYY-MM format
+    calls_minutes INTEGER DEFAULT 0,
+    data_mb INTEGER DEFAULT 0,
+    sms_count INTEGER DEFAULT 0,
+    extra_charges DECIMAL(10,2) DEFAULT 0.00,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE,
+    UNIQUE(customer_id, usage_month)
+);
+
+-- ================================
+-- 8. ÇAĞRI GEÇMİŞİ (ANA TABLO)
+-- ================================
+CREATE TABLE call_sessions (
+    session_id VARCHAR(50) PRIMARY KEY,
+    customer_id VARCHAR(10),
+    start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    end_time TIMESTAMP,
+    duration_seconds INTEGER,
+    call_type VARCHAR(20) DEFAULT 'inbound', -- inbound, outbound
+    status VARCHAR(20) DEFAULT 'active', -- active, completed, abandoned
+    agent_mode VARCHAR(20) DEFAULT 'ai', -- ai, human, mixed
+    customer_satisfaction INTEGER, -- 1-5 rating
+    resolution_status VARCHAR(30), -- resolved, pending, escalated
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+
+-- ================================
+-- 9. ÇAĞRI DETAYLARİ (MESAJLAR)
+-- ================================
+CREATE TABLE call_messages (
+    message_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id VARCHAR(50) NOT NULL,
+    role VARCHAR(20) NOT NULL, -- user, assistant, system
+    content TEXT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    message_type VARCHAR(20) DEFAULT 'text', -- text, voice, action
+    tool_call VARCHAR(50), -- hangi araç çağrıldıysa
+    tool_result TEXT, -- araç sonucu
+    processing_time_ms INTEGER, -- yanıt süresi
+    FOREIGN KEY (session_id) REFERENCES call_sessions(session_id) ON DELETE CASCADE
+);
+
+-- ================================
+-- 10. ARAÇ KULLANIM LOGLARI
+-- ================================
+CREATE TABLE tool_usage_logs (
+    log_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id VARCHAR(50) NOT NULL,
+    tool_name VARCHAR(50) NOT NULL,
+    parameters TEXT, -- JSON format
+    result TEXT,
+    execution_time_ms INTEGER,
+    success BOOLEAN DEFAULT TRUE,
+    error_message TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (session_id) REFERENCES call_sessions(session_id) ON DELETE CASCADE
+);
+
+-- ================================
+-- 11. SİSTEM PERFORMANS METRİKLERİ
+-- ================================
+CREATE TABLE system_metrics (
+    metric_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    metric_date DATE NOT NULL,
+    total_calls INTEGER DEFAULT 0,
+    successful_calls INTEGER DEFAULT 0,
+    failed_calls INTEGER DEFAULT 0,
+    avg_response_time_ms INTEGER DEFAULT 0,
+    avg_call_duration_seconds INTEGER DEFAULT 0,
+    tool_call_count INTEGER DEFAULT 0,
+    ai_accuracy_rate DECIMAL(5,2), -- percentage
+    customer_satisfaction_avg DECIMAL(3,2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(metric_date)
+);
+
+-- ================================
+-- 12. HATA LOGLARI
+-- ================================
+CREATE TABLE error_logs (
+    error_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id VARCHAR(50),
+    error_type VARCHAR(50) NOT NULL,
+    error_message TEXT NOT NULL,
+    stack_trace TEXT,
+    severity VARCHAR(20) DEFAULT 'medium', -- low, medium, high, critical
+    resolved BOOLEAN DEFAULT FALSE,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (session_id) REFERENCES call_sessions(session_id)
+);
+
+-- ================================
+-- INDEXES (Performans için)
+-- ================================
+CREATE INDEX idx_customers_phone ON customers(phone);
+CREATE INDEX idx_customers_status ON customers(status);
+CREATE INDEX idx_customer_subscriptions_customer ON customer_subscriptions(customer_id);
+CREATE INDEX idx_customer_subscriptions_status ON customer_subscriptions(status);
+CREATE INDEX idx_bills_customer ON bills(customer_id);
+CREATE INDEX idx_bills_month ON bills(bill_month);
+CREATE INDEX idx_bills_paid ON bills(is_paid);
+CREATE INDEX idx_usage_stats_customer ON usage_stats(customer_id);
+CREATE INDEX idx_usage_stats_month ON usage_stats(usage_month);
+CREATE INDEX idx_call_sessions_customer ON call_sessions(customer_id);
+CREATE INDEX idx_call_sessions_date ON call_sessions(start_time);
+CREATE INDEX idx_call_sessions_status ON call_sessions(status);
+CREATE INDEX idx_call_messages_session ON call_messages(session_id);
+CREATE INDEX idx_call_messages_timestamp ON call_messages(timestamp);
+CREATE INDEX idx_tool_usage_session ON tool_usage_logs(session_id);
+CREATE INDEX idx_tool_usage_tool ON tool_usage_logs(tool_name);
+CREATE INDEX idx_error_logs_session ON error_logs(session_id);
+CREATE INDEX idx_error_logs_timestamp ON error_logs(timestamp);
+
+-- ================================
+-- VIEWS (Kolay sorgular için)
+-- ================================
+
+-- Aktif müşteri paketleri görünümü
+CREATE VIEW active_customer_packages AS
+SELECT 
+    c.customer_id,
+    c.name,
+    p.package_name,
+    cs.start_date,
+    cb.current_balance
+FROM customers c
+JOIN customer_subscriptions cs ON c.customer_id = cs.customer_id
+JOIN packages p ON cs.package_id = p.package_id
+JOIN customer_balances cb ON c.customer_id = cb.customer_id
+WHERE cs.status = 'active' AND c.status = 'active';
+
+-- Aylık performans özeti
+CREATE VIEW monthly_performance AS
+SELECT 
+    DATE(start_time, 'start of month') as month,
+    COUNT(*) as total_calls,
+    AVG(duration_seconds) as avg_duration,
+    COUNT(CASE WHEN resolution_status = 'resolved' THEN 1 END) as resolved_calls,
+    AVG(customer_satisfaction) as avg_satisfaction
+FROM call_sessions 
+WHERE start_time >= DATE('now', '-12 months')
+GROUP BY DATE(start_time, 'start of month');
+
+-- En çok kullanılan araçlar
+CREATE VIEW top_tools AS
+SELECT 
+    tool_name,
+    COUNT(*) as usage_count,
+    AVG(execution_time_ms) as avg_execution_time,
+    (COUNT(CASE WHEN success = 1 THEN 1 END) * 100.0 / COUNT(*)) as success_rate
+FROM tool_usage_logs 
+WHERE timestamp >= DATE('now', '-30 days')
+GROUP BY tool_name
+ORDER BY usage_count DESC;

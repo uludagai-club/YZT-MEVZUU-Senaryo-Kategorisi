@@ -1,0 +1,51 @@
+# AI Çağrı Merkezi - Gerekli Paketler
+
+# Web Framework & UI
+streamlit>=1.28.0
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# Database & ORM
+sqlite3  # Python built-in module
+
+# Data Processing & Analysis
+pandas>=2.1.0
+numpy>=1.24.0
+
+# API & HTTP
+requests>=2.31.0
+pydantic>=2.4.0
+
+# Plotting & Visualization
+plotly>=5.17.0
+
+# Audio & Speech Processing
+gTTS>=2.4.0
+
+# Optional Speech Recognition (Streamlit Component)
+streamlit-mic-recorder>=0.0.5
+
+# Date & Time
+python-dateutil>=2.8.0
+
+# Logging & Utils
+pathlib  # Python built-in module
+typing  # Python built-in module
+json  # Python built-in module
+uuid  # Python built-in module
+base64  # Python built-in module
+io  # Python built-in module
+html  # Python built-in module
+contextlib  # Python built-in module
+dataclasses  # Python built-in module
+logging  # Python built-in module
+time  # Python built-in module
+datetime  # Python built-in module
+random  # Python built-in module
+
+# Development & Testing (Optional)
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# AI/LLM Integration (if needed)
+
